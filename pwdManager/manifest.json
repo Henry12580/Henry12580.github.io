@@ -1,0 +1,14 @@
+{
+  "name": "Accounts Manager",
+  "short_name": "pwdManager",
+  "description": "账户管理器",
+  "icons": [
+    {
+      "src": "account.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone"
+}

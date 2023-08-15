@@ -2,11 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./vite.svg" />
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="account.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Account Manager</title>
-    <script type="module" crossorigin src="./assets/index.352e27f1.js"></script>
-    <link rel="stylesheet" href="./assets/index.4988877f.css">
+    <title>Accounts Manager</title>
+    <script defer>
+      // 注册service worker
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("sw.js");
+      }
+    </script>
+    <script type="module" crossorigin src="./assets/index.aef3fe97.js"></script>
+    <link rel="stylesheet" href="./assets/index.ff1e14a0.css">
   </head>
   <body>
     <div id="app"></div>
