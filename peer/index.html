@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<script src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js"></script>
+
+<body>
+  <div id="root">
+    <video class="self" autoplay muted data-focused="false"></video>
+    <video class="peer" autoplay data-focused></video>
+  </div>
+</body>
+
+<style>
+  * {
+    margin: 0;
+  }
+
+  div#root {
+    width: 100%;
+  }
+
+  @media (min-width: 1200px) {
+    div#root {
+      display: flex;
+      align-items: start;
+    }
+
+    video[data-focused=false] {
+      flex-grow: 1;
+    }
+
+    video[data-focused=true] {
+      height: 100vh;
+    }
+  }
+
+  video:hover {
+    cursor: pointer;
+  }
+  
+  @media (max-width: 1199px) {
+    video {
+      width: 100vw;
+    }
+  }
+</style>
+
+<script>
+  let another_peers_id = "";
+  const peer = new Peer();
+  const selfVideo = document.querySelector('video.self');
+  const peerVideo = document.querySelector('video.peer');
+
+  selfVideo.addEventListener('click', event => {
+    event.preventDefault();
+    console.log('jgei')
+    selfVideo.dataset.focused = true;
+    peerVideo.dataset.focused = false;
+  });
+  peerVideo.addEventListener('click', event => {
+    event.preventDefault();
+    peerVideo.dataset.focused = true;
+    selfVideo.dataset.focused = false;
+  });
+
+  peer.on('open', id => {
+    alert(`您的id是 ${id}`);
+    another_peers_id = prompt("请输入对方id：", "");
+  });
+
+  var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+  getUserMedia({ video: true, audio: true }, function (stream) {
+    selfVideo.srcObject = stream;
+
+    if (another_peers_id) {
+      const call = peer.call(another_peers_id, stream);
+      call.on('stream', function (remoteStream) {
+        peerVideo.srcObject = remoteStream;
+      });
+    }
+
+    peer.on('call', function (call) {
+      call.answer(stream);
+      call.on('stream', function (remoteStream) {
+        peerVideo.srcObject = remoteStream;
+      })
+    })
+  }, function (err) {
+    console.error('Failed to get local stream', err);
+  });
+</script>
+
+</html>
