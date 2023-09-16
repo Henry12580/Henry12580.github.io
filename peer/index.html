@@ -90,7 +90,11 @@
   const closeDiagButton = document.querySelector('#close-diag');
 
   confirmPeerIdButton.addEventListener('click', event => {
-    peerId = peerIdInput.value;
+    const peerId_new = peerIdInput.value;
+    if (peerId !== peerId_new) {
+      peerId = peerId_new;
+      call();
+    }
     dialog.close();
   });
 
@@ -131,26 +135,31 @@
     dialog.showModal();
   });
 
-  var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-  getUserMedia({ video: true, audio: true }, function (stream) {
-    selfVideo.srcObject = stream;
+  function call() {
+    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    getUserMedia({ video: true, audio: true }, function (stream) {
+      selfVideo.srcObject = stream;
 
-    if (another_peers_id) {
-      const call = peer.call(another_peers_id, stream);
-      call.on('stream', function (remoteStream) {
-        peerVideo.srcObject = remoteStream;
-      });
-    }
+      if (peerId) {
+        const call = peer.call(peerId, stream);
+        call.on('stream', function (remoteStream) {
+          peerVideo.srcObject = remoteStream;
+        });
+      }
 
-    peer.on('call', function (call) {
-      call.answer(stream);
-      call.on('stream', function (remoteStream) {
-        peerVideo.srcObject = remoteStream;
+      peer.on('call', function (call) {
+        call.answer(stream);
+        call.on('stream', function (remoteStream) {
+          peerVideo.srcObject = remoteStream;
+        })
       })
-    })
-  }, function (err) {
-    console.error('Failed to get local stream', err);
-  });
+    }, function (err) {
+      console.error('Failed to get local stream', err);
+    });
+  }
+
+  call();
+
 </script>
 
 </html>
