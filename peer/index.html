@@ -13,6 +13,19 @@
     <video class="self" autoplay muted data-focused="false"></video>
     <video class="peer" autoplay data-focused></video>
   </div>
+  <dialog id="dialog">
+    <div>
+      <span>您的id是 &nbsp; </span><span id="my-id"></span>
+    </div>
+    <div>
+      <span>请输入对方id：</span><input id="peer-id" type="text">
+    </div>
+    <div class="flex-row buttons">
+      <button id="copy-my-id">复制id到剪贴板</button>
+      <button id="confirm-peer-id">确认</button>
+      <button id="close-diag">关闭</button>
+    </div>
+  </dialog>
 </body>
 
 <style>
@@ -22,6 +35,19 @@
 
   div#root {
     width: 100%;
+  }
+
+  .flex-row {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .flex-row.buttons {
+    justify-content: end;
+  }
+
+  button {
+    margin: 5px;
   }
 
   @media (min-width: 1200px) {
@@ -42,7 +68,7 @@
   video:hover {
     cursor: pointer;
   }
-  
+
   @media (max-width: 1199px) {
     video {
       width: 100vw;
@@ -51,17 +77,48 @@
 </style>
 
 <script>
-  let another_peers_id = "";
+  let myId = "";
+  let peerId = "";
   const peer = new Peer();
   const selfVideo = document.querySelector('video.self');
   const peerVideo = document.querySelector('video.peer');
+  const myIdSpan = document.querySelector('#my-id');
+  const dialog = document.querySelector('#dialog');
+  const peerIdInput = document.querySelector('#peer-id');
+  const copyMyIdButton = document.querySelector('#copy-my-id');
+  const confirmPeerIdButton = document.querySelector('#confirm-peer-id');
+  const closeDiagButton = document.querySelector('#close-diag');
+
+  confirmPeerIdButton.addEventListener('click', event => {
+    peerId = peerIdInput.value;
+    dialog.close();
+  });
+
+  closeDiagButton.addEventListener('click', event => {
+    dialog.close();
+  });
+
+  // dialog.addEventListener('close', )
+
+  document.addEventListener('visibilitychange', async () => {
+    if (document.visibilityState !== "visible") {
+      await peerVideo.requestPictureInPicture();
+    } else {
+      document.exitPictureInPicture();
+    }
+  })
+
+  copyMyIdButton.addEventListener('click', async event => {
+    await navigator.clipboard.writeText(myIdSpan.innerHTML);
+    alert('已复制到剪贴板！');
+  })
 
   selfVideo.addEventListener('click', event => {
     event.preventDefault();
-    console.log('jgei')
     selfVideo.dataset.focused = true;
     peerVideo.dataset.focused = false;
   });
+
   peerVideo.addEventListener('click', event => {
     event.preventDefault();
     peerVideo.dataset.focused = true;
@@ -69,8 +126,9 @@
   });
 
   peer.on('open', id => {
-    alert(`您的id是 ${id}`);
-    another_peers_id = prompt("请输入对方id：", "");
+    myId = id;
+    myIdSpan.innerHTML = myId;
+    dialog.showModal();
   });
 
   var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
