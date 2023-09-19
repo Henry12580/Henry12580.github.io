@@ -1,219 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
   <title>Document</title>
 </head>
 <script src="https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js"></script>
-
 <body>
   <div id="root">
     <video class="self" autoplay muted data-focused="false"></video>
     <video class="peer" autoplay controls data-focused="false"></video>
   </div>
-  <dialog id="dialog">
-    <div>
-      <span>您的id是 &nbsp; </span><span id="my-id"></span>
+  <dialog id="control-dialog">
+    <div class="flex-row">
+      <span>您的id是 &nbsp; </span><span id="my-id" class="id"></span>
     </div>
-    <div>
-      <span>请输入对方id：</span><input id="peer-id" type="text">
+    <div class="flex-row">
+      <span>请输入对方id：</span><input class="peer-id" type="text">
+    </div>
+    <div class="flex-row">
+      <span>布局：</span>
+      <button id="equal-layout" data-selected="true">平等</button>
+      <button id="focus-layout" data-selected="false">聚焦</button>
     </div>
     <div class="flex-row buttons">
       <button id="copy-my-id">复制id到剪贴板</button>
-      <button id="confirm-peer-id">确认</button>
-      <button id="close-diag">关闭</button>
+      <button class="confirm" id="confirm-id">确认</button>
+      <button id="close-control-dialog">关闭</button>
     </div>
   </dialog>
-  <div id="input-entrance">
-    ID
+  <div id="message-dialog">
+    <button id="history-button">展开历史消息</button>
+    <div class="flex-row">
+      <input class="message-input" type="text" placeholder="“enter”发送">
+    </div>
+    <div class="flex-row buttons">
+      <button class="confirm" id="send-message">发送</button>
+      <button id="clear-message">清空</button>
+      <button id="close-message-dialog">关闭</button>
+    </div>
   </div>
+  <div id="control-ball"></div>
+  <div id="message-ball"></div>
 </body>
-
-<style>
-  * {
-    margin: 0;
-  }
-
-  :root {
-    font-size: 18px;
-  }
-
-  div#root {
-    width: 100%;
-  }
-
-  #dialog {
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1rem;
-  }
-
-  input#peer-id {
-    width: 300px;
-  }
-
-  .flex-row {
-    display: flex;
-    flex-direction: row;
-  }
-
-  .flex-row.buttons {
-    font-size: 1rem;
-    justify-content: end;
-  }
-
-  button {
-    margin: 5px;
-    font-size: 1rem;
-  }
-
-  @media (min-width: 1200px) {
-    div#root {
-      width: 100%;
-      display: flex;
-      align-items: start;
-    }
-
-    video[data-focused=false] {
-      flex-grow: 1;
-      flex-shrink: 2; /* 超过页面宽度自动收缩，初始值为1 */
-    }
-
-    video[data-focused=true] {
-      height: 100vh;
-    }
-  }
-
-  video:hover {
-    cursor: pointer;
-  }
-
-  @media (max-width: 1199px) {
-    video {
-      width: 100vw;
-    }
-  }
-
-  #input-entrance {
-    font-size: 24px;
-    background-color: orange;
-    border-radius: 0 50% 50% 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    visibility: hidden;
-  }
-
-  #input-entrance:hover {
-    cursor: pointer;
-  }
-
-</style>
-
-<script>
-  let myId = "";
-  let peerId = "";
-  const peer = new Peer();
-  const selfVideo = document.querySelector('video.self');
-  const peerVideo = document.querySelector('video.peer');
-  const myIdSpan = document.querySelector('#my-id');
-  const dialog = document.querySelector('#dialog');
-  const peerIdInput = document.querySelector('#peer-id');
-  const copyMyIdButton = document.querySelector('#copy-my-id');
-  const confirmPeerIdButton = document.querySelector('#confirm-peer-id');
-  const closeDiagButton = document.querySelector('#close-diag');
-  const inputEntrance = document.querySelector('#input-entrance');
-
-  let focusedVideo = null;
-
-  confirmPeerIdButton.addEventListener('click', event => {
-    const peerId_new = peerIdInput.value;
-    if (peerId !== peerId_new) {
-      peerId = peerId_new;
-      call();
-    }
-    dialog.close();
-  });
-
-  closeDiagButton.addEventListener('click', event => {
-    dialog.close();
-  });
-
-  dialog.addEventListener('close', event => {
-    inputEntrance.style.visibility = 'visible';
-  })
-
-  inputEntrance.addEventListener('click', evt => {
-    dialog.showModal();
-    inputEntrance.style.visibility = 'hidden';
-  })
-
-  document.addEventListener('visibilitychange', async () => {
-    if (document.visibilityState !== "visible") {
-      if (focusedVideo) {
-        await focusedVideo.requestPictureInPicture();
-      }
-    } else {
-      document.exitPictureInPicture();
-    }
-  })
-
-  copyMyIdButton.addEventListener('click', async event => {
-    try {
-      await navigator.clipboard.writeText(myIdSpan.innerHTML);
-      alert('已复制到剪贴板！');
-    } catch(err) {
-      alert('复制出错，请手动复制！');
-    }
-  })
-
-  selfVideo.addEventListener('click', event => {
-    event.preventDefault();
-    selfVideo.dataset.focused = true;
-    peerVideo.dataset.focused = false;
-    focusedVideo = selfVideo;
-  });
-
-  peerVideo.addEventListener('click', event => {
-    event.preventDefault();
-    peerVideo.dataset.focused = true;
-    selfVideo.dataset.focused = false;
-    focusedVideo = peerVideo;
-  });
-
-  peer.on('open', id => {
-    myId = id;
-    myIdSpan.innerHTML = myId;
-    dialog.showModal();
-  });
-
-  function call() {
-    var getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    getUserMedia({ video: true, audio: true }, function (stream) {
-      selfVideo.srcObject = stream;
-
-      if (peerId) {
-        const call = peer.call(peerId, stream);
-        call.on('stream', function (remoteStream) {
-          peerVideo.srcObject = remoteStream;
-        });
-      }
-
-      peer.on('call', function (call) {
-        call.answer(stream);
-        call.on('stream', function (remoteStream) {
-          peerVideo.srcObject = remoteStream;
-        })
-      })
-    }, function (err) {
-      console.error('Failed to get local stream', err);
-    });
-  }
-
-  call();
-
-</script>
+<script src="script.js"></script>
 </html>

@@ -1,0 +1,197 @@
+* {
+  margin: 0;
+}
+
+@media (min-width: 1200px) {
+  div#root {
+    width: 100%;
+    display: flex;
+    align-items: start;
+  }
+
+  :root {
+    font-size: 20px;
+    --ball-size: min(4.5vw, 4.5vh);
+    --message-dialog-width: 400px;
+  }
+
+  video[data-focused=false] {
+    flex-grow: 1;
+    flex-shrink: 2;
+    /* 超过页面宽度自动收缩，初始值为1 */
+  }
+
+  video[data-focused=true] {
+    height: 100vh;
+  }
+
+}
+
+@media (max-width: 1199px) {
+  video {
+    width: 100vw;
+  }
+  
+  :root {
+    font-size: 3vw;
+    --ball-size: 40px;
+    --message-dialog-width: 50vw;
+  }
+}
+
+.flex-row.buttons {
+  font-size: 1rem;
+  justify-content: end;
+}
+
+span#my-id {
+  font-weight: bold;
+}
+
+div#root {
+  width: 100%;
+}
+
+dialog {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1rem;
+}
+
+.flex-row > input {
+  flex-grow: 1;
+}
+
+button.confirm {
+  background-color:orange;
+}
+
+button.confirm:hover {
+  background-color: chocolate;
+}
+
+.flex-row {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+button {
+  margin: 5px;
+  font-size: 1rem;
+}
+
+button#history-button {
+  /* width: 100%; */
+}
+
+@keyframes flyIn {
+  from {
+    left: 100vw;
+    transform: translateX(0);
+  }
+  to {
+    left: 0vw;
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes flyOut {
+  0% {
+    left: 0vw;
+    transform: translateX(-100%);
+  }
+  100% {
+    left: 100vw;
+    transform: translateX(0);
+  }
+}
+
+div.coming-message {
+  width: max-content;
+  font-size: 2rem;
+  font-weight: bold;
+  position: absolute;
+  color: red;
+  top: 20vh;
+  left: 100vw;
+  animation-name: flyIn;
+  animation-duration: 10s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+div.sending-message {
+  width: max-content;
+  position: absolute;
+  font-size: 2rem;
+  font-weight: bold;
+  color: green;
+  top: 10vh;
+  transform: translateX(-100%);
+  animation-name: flyOut;
+  animation-duration: 10s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+input.message-input {
+  height: 2rem;
+  width: 100%;
+}
+
+button[data-selected=true] {
+  background-color: rgb(187, 255, 0);
+}
+
+#message-dialog {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  visibility: hidden;
+  min-width: var(--message-dialog-width);
+  border: 1px solid black;
+  padding: 20px;
+  opacity: 0.8;
+}
+
+input {
+  font-size: 1rem;
+}
+
+video:hover {
+  cursor: pointer;
+}
+
+#control-ball {
+  width: var(--ball-size);
+  height: var(--ball-size);
+  background-color: orange;
+  border-style: double;
+  border-color: bisque;
+  border-radius: 50% 50% 50% 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  visibility: hidden;
+}
+
+#message-ball {
+  width: 50px;
+  height: 50px;
+  background-image: url(assets/message_small.png);
+  border-radius: 50% 50% 50% 50%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+#control-ball:hover {
+  cursor: pointer;
+}
