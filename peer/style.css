@@ -2,16 +2,19 @@
   margin: 0;
 }
 
-@media (min-width: 1200px) {
+@media screen and (orientation: landscape) and (min-aspect-ratio: 1) {
   div#root {
-    width: 100%;
+    width: 1000px;
     display: flex;
-    align-items: start;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   :root {
     font-size: 20px;
-    --ball-size: min(4.5vw, 4.5vh);
+    --ball-size: 3vw;
     --message-dialog-width: 400px;
   }
 
@@ -27,14 +30,15 @@
 
 }
 
-@media (max-width: 1199px) {
+/* 竖屏且宽高比小于1 */
+@media screen and (orientation: portrait) and (max-aspect-ratio: 1) {
   video {
     width: 100vw;
   }
   
   :root {
     font-size: 3vw;
-    --ball-size: 40px;
+    --ball-size: 8vw;
     --message-dialog-width: 50vw;
   }
 }
@@ -42,6 +46,10 @@
 .flex-row.buttons {
   font-size: 1rem;
   justify-content: end;
+}
+
+video.self {
+  transform: scaleX(-1); /* 水平翻转 */
 }
 
 span#my-id {
@@ -147,7 +155,7 @@ button[data-selected=true] {
 }
 
 #message-dialog {
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);

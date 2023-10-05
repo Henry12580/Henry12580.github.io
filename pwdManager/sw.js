@@ -6,9 +6,9 @@ const precachedResources = [
   "/pwdManager/manifest.json",
   "/pwdManager/account.png",
   "/pwdManager/vite.svg",
-  "/pwdManager/assets/index.js",
-  "/pwdManager/assets/index.css",
-  "/pwdManager/assets/background.jpg",
+  "/pwdManager/assets/index.abbdac4b.js",
+  "/pwdManager/assets/index.6779815d.css",
+  "/pwdManager/assets/background.b08d1747.jpg",
 ];
 
 async function precache() {
