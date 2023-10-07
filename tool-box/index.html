@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <title>工具箱</title>
+</head>
+<script src="translate.js"></script>
+<script defer>
+  // 注册service worker
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+  }
+</script>
+<body>
+  <div id="routers">
+    <div id="Homepage">
+      <div>
+        <button name="weather-history">历史天气</button>
+      </div>
+    </div>
+    <div id="WeatherHistory">
+      <div class="condition">
+        <span>城&nbsp; &nbsp; &nbsp;&nbsp;市：<input class="city" placeholder="拼音输入，默认jinan"/></span>
+        <span>开始时间：<input class="start-time"/></span>
+        <span>结束时间：<input class="end-time"></span>
+        <button class="search">查询</button>
+      </div>
+      <table>
+        <thead>
+          <td class="datetime">日期</td>
+          <td>天气</td>
+          <td class="temperature">温度</td>
+          <td class="humidity">湿度</td>
+          <td>气压</td>
+          <td>风力</td>
+        </thead>
+        <tbody></tbody>
+      </table>
+      <p>注：数据来自visualcrossing.com</p>
+    </div>
+  </div>
+</body>
+<script src="index.js"></script>
+</html>

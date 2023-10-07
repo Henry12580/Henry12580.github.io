@@ -1,0 +1,15 @@
+const translation = {
+  "datetime": "日期",
+  "humidity": "湿度",
+  "pressure": "气压",
+  "Rain": "雨",
+  "rain": "雨",
+  "cloudy": "多云",
+  "Overcast": "多云",
+  "visibility": "能见度",
+  "windspeed": "风力",
+  "Clear": "晴",
+  "clear-day": "晴",
+  "partly-cloudy-day": "局部多云",
+  "Partially cloudy": "局部多云",
+}

@@ -1,0 +1,14 @@
+{
+  "name": "",
+  "short_name": "tool-box",
+  "description": "工具箱",
+  "icons": [
+    {
+      "src": "tools_icon_large.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone"
+}
