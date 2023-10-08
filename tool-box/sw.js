@@ -1,4 +1,4 @@
-const cacheName = "AppCache-v1";
+const cacheName = "tool-box-cache";
 const precachedResources = [
   "/tool-box/", 
   "/tool-box/index.html", 
