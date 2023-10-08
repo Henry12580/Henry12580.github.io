@@ -7,7 +7,7 @@ const precachedResources = [
   "/tool-box/sw.js",
   "/tool-box/translate.js",
   "/tool-box/manifest.json",
-  "/tool-box/tools_icon_large.json",
+  "/tool-box/tools_icon_large.png",
 ];
 
 async function precache() {
