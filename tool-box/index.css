@@ -80,3 +80,12 @@ iframe {
   height: 800px;
   object-position: 100px 500px;
 }
+
+thead td {
+  font-weight: bold;
+}
+
+td {
+  text-align: center;
+  padding: 1px 0.5rem;
+}

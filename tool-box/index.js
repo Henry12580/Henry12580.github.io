@@ -74,15 +74,12 @@ class WeatherHistory {
     let [year, month, day] = [date.getFullYear(), date.getMonth()+1, date.getDate()];
     [year, month, day] = [year, month < 10 ? '0' + month : month, day < 10 ? '0' + day : day];
     const currDate = `${year}-${month}-${day}`;
-    let preMonth = month > 10 ? month - 1 : month > 0 ? '0' + (month - 1) : 12;
-    let preYear = month > 0 ? year : year - 1;
-    const preMonthDate = `${preYear}-${preMonth}-${day}`;
-    this.startDateInput.placeholder = `默认为 ${preMonthDate}`;
+    this.startDateInput.placeholder = `默认为 ${currDate}`;
     this.endDateInput.placeholder = `默认为 ${currDate}`;
 
     this.searchButton.addEventListener('click', e => {
       this.city = this.cityInput.value || 'jinan';
-      this.startDate = this.startDateInput.value || preMonthDate;
+      this.startDate = this.startDateInput.value || currDate;
       this.endDate = this.endDateInput.value || currDate;
       this.searchWeather(this.city, this.startDate, this.endDate);
     })
@@ -96,13 +93,14 @@ class WeatherHistory {
         const tr = document.createElement('tr');
         for (let idx of this.weatherIndexes) {
           const td = document.createElement('td');
-          td.innerHTML = idx === 'icon' ? translation[day[idx]] : idx === 'temperature' ? `${day[tempmin]} ~ ${day[tempmax]}` : day[idx];
+          td.innerHTML = idx === 'icon' ? translation[day[idx]] : idx === 'temperature' ? `${day["tempmin"]} ~ ${day["tempmax"]}` : day[idx];
           tr.appendChild(td);
         }
         this.weatherTableBody.appendChild(tr);
       }
       this.weatherTable.style.display = 'table';
     }).catch(err => {
+      console.error(err);
       alert("请求过于频繁，请稍后再试");
     });
   }
